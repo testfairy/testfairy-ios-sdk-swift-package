@@ -1,0 +1,1 @@
+# testfairy-ios-sdk-swift-package
