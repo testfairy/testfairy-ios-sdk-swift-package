@@ -13,8 +13,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "TestFairy",
-            url: "https://app.testfairy.com/ios-sdk/TestFairySDK-1.27.1.xcframework.zip",
-            checksum: "66bba5aaa28b29edde687ca3449f2e6e79aa50b9b3bf8ffba3b7ae3ae501665b"
+            url: "https://app.testfairy.com/ios-sdk/TestFairySDK-1.27.2.xcframework.zip",
+            checksum: "8f42887de548927a42e48b8ca286c2313fb84498aaa6766e65a9f21bc75960cf"
         ),
     ]
 )
