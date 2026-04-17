@@ -1,0 +1,91 @@
+name: Validate release in example app
+
+# Fires when a new GitHub Release is published on this repo. Sends a
+# repository_dispatch event to the example app repo, which will open a PR
+# bumping its TestFairy SDK pin, run its CI, and upload to TestFlight.
+#
+# Manual workflow_dispatch is kept for dry-runs and for ad-hoc re-validation
+# of a previously published release.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "SDK version to dispatch (tag name, e.g. 1.34.0)"
+        required: true
+      target_repo:
+        description: "owner/name of the example app repo"
+        required: false
+        default: saucelabs/my-demo-app-ios
+      base_branch:
+        description: "Base branch in the example app to branch from"
+        required: false
+        default: main
+
+permissions:
+  contents: read
+
+jobs:
+  dispatch:
+    # Skip pre-releases on the `release` trigger path. SPM's upToNextMajorVersion
+    # requirement doesn't match pre-release semvers anyway.
+    if: github.event_name == 'workflow_dispatch' || !github.event.release.prerelease
+    runs-on: ubuntu-latest
+    env:
+      TARGET_REPO: ${{ inputs.target_repo || 'saucelabs/my-demo-app-ios' }}
+      VERSION: ${{ inputs.version || github.event.release.tag_name }}
+      RELEASE_URL: ${{ github.event.release.html_url || '' }}
+      NOTES: ${{ github.event.release.body || '' }}
+      BASE_BRANCH: ${{ inputs.base_branch || 'main' }}
+    steps:
+      - name: Checkout repo at release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.VERSION }}
+
+      - name: Extract xcframework checksum from Package.swift
+        id: sha
+        run: |
+          set -euo pipefail
+          SHA=$(grep -oE 'checksum: "[a-f0-9]+"' Package.swift | head -n 1 | cut -d'"' -f2 || true)
+          if [ -z "${SHA:-}" ]; then
+            echo "::warning::Could not extract checksum from Package.swift"
+          fi
+          echo "sha=${SHA:-}" >> "$GITHUB_OUTPUT"
+
+      - name: Fire repository_dispatch at example app
+        env:
+          # PAT (classic: repo scope; fine-grained: Contents:write on the target repo)
+          # or GitHub App installation token with the same scope.
+          GH_TOKEN: ${{ secrets.EXAMPLE_APP_DISPATCH_TOKEN }}
+          XCFRAMEWORK_SHA: ${{ steps.sha.outputs.sha }}
+        run: |
+          set -euo pipefail
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "::error::EXAMPLE_APP_DISPATCH_TOKEN secret is not set; cannot dispatch."
+            exit 1
+          fi
+
+          # Build the full request body with jq so all escaping is handled safely
+          # (release notes may contain quotes, backticks, colons, $(...), etc.).
+          payload=$(jq -n \
+            --arg version "$VERSION" \
+            --arg release_url "$RELEASE_URL" \
+            --arg notes "$NOTES" \
+            --arg xcframework_sha "$XCFRAMEWORK_SHA" \
+            --arg base_branch "$BASE_BRANCH" \
+            '{
+               event_type: "testfairy-sdk-bump",
+               client_payload: {
+                 version: $version,
+                 release_url: $release_url,
+                 notes: $notes,
+                 xcframework_sha: $xcframework_sha,
+                 base_branch: $base_branch
+               }
+             }')
+
+          echo "Dispatching testfairy-sdk-bump (version=$VERSION) to $TARGET_REPO"
+          echo "$payload" | gh api "repos/$TARGET_REPO/dispatches" --input -
