@@ -1,12 +1,39 @@
-# Swift Package for TestFairy on iOS
+# Swift Package for Sauce Mobile Beta on iOS
 
-For class reference, installation and more information, please visit
-[Integrating the iOS SDK](https://docs.testfairy.com/iOS_SDK/Integrating_iOS_SDK.html) by TestFairy.
+Sauce Mobile Beta SDK, formerly TestFairy SDK.
+
+This Swift package distributes the **crashless** Sauce Mobile Beta artifact,
+intended for use alongside **Backtrace Error Reporting SDK**. Backtrace is the sole crash owner.
+This SDK provides beta session, feedback, remote logging, and tester workflow features.
+
+## Installation
+
+Add the package to your project:
+
+```
+https://github.com/saucelabs/sauce-mobile-beta-ios.git
+```
+
+The SwiftPM product is `SauceMobileBeta`. 
+The runtime module is still `TestFairy`, so existing source keeps working unchanged.
+
+## Usage with Backtrace
+
+```swift
+import Backtrace
+import TestFairy
+
+// 1. Initialize Backtrace as the crash owner.
+// 2. Initialize Sauce Mobile Beta WITHOUT a crash handler.
+TestFairy.beginWithoutCrashHandler("<sauce-mobile-beta-token>")
+```
+
+Do not call `enableCrashHandler` / `installCrashHandler` in coexistence mode, they are no-ops in this crashless artifact.
 
 License
 =======
 
-    Copyright 2017-2021 TestFairy.
+    Copyright 2017-2026 Sauce Labs Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
