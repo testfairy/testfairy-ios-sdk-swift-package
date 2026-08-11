@@ -27,11 +27,17 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "TestFairy",
-            // TODO(release): replace with the published crashless artifact URL + checksum.
-            // Produce with `make dist/xcframework-crashless` and compute the
-            // checksum via `swift package compute-checksum <zip>`.
-            url: "https://saucelabs-mobile-sdk.s3.amazonaws.com/sdk/SauceMobileBeta-<version>.xcframework.zip",
-            checksum: "<sha256-of-crashless-xcframework-zip>"
+            // Interim hosting (2026-08-05): existing testfairy S3 bucket.
+            // testfairy-ios-sdk's release-crashless.yml builds, validates
+            // (tools/ci/validate-ios-crashless.sh) and uploads this zip on an
+            // smb-<version> tag, and prints the SPM checksum in its job summary.
+            //
+            // DRY RUN (2026-08-11): pinned to the smb-7.7.7 test release built
+            // from testfairy-ios-sdk 5d75807 to rehearse the full release path.
+            // TODO(release): switch to SauceMobileBeta-2.0.0.xcframework.zip and
+            // its CI checksum before tagging 2.0.0 here.
+            url: "https://testfairy.s3.amazonaws.com/sdk/SauceMobileBeta-7.7.7.xcframework.zip",
+            checksum: "7c9263d768e9215d0b665b9729a0ab9ffe718365178d592c0433790e080ff4a6"
         ),
     ]
 )

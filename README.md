@@ -11,8 +11,12 @@ This SDK provides beta session, feedback, remote logging, and tester workflow fe
 Add the package to your project:
 
 ```
-https://github.com/saucelabs/sauce-mobile-beta-ios.git
+https://github.com/testfairy/testfairy-ios-sdk-swift-package.git
 ```
+
+(Interim location — the package stays in its existing repository for the 2.0.0
+release so SPM URLs keep resolving; a move to a saucelabs-org repository is a
+separate, later step.)
 
 The SwiftPM product is `SauceMobileBeta`. 
 The runtime module is still `TestFairy`, so existing source keeps working unchanged.
