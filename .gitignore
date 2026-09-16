@@ -1,2 +1,4 @@
 TestFairySDK*xcframework.zip
 SauceMobileBeta*xcframework.zip
+.DS_Store
+.swiftpm/
