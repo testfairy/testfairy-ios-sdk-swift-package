@@ -29,8 +29,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "TestFairy",
-            url: "https://testfairy.s3.amazonaws.com/sdk/SauceMobileBeta-2.2.0-rc.xcframework.zip",
-            checksum: "c647a49f86891b5df3a74dfdd5fcc0027fed67ff0d5caede92841d6982f11dd3"
+            url: "https://testfairy.s3.amazonaws.com/sdk/SauceMobileBeta-2.2.0-rc2.xcframework.zip",
+            checksum: "ec13df8d7bd18c773d8eac91ed179386106cfc97f7d2cbdbc251abfad88d3bfb"
         ),
     ]
 )
