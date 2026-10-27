@@ -14,8 +14,8 @@ Add the package to your project:
 https://github.com/testfairy/testfairy-ios-sdk-swift-package.git
 ```
 
-Pre-release versions such as `2.2.0-rc2` are skipped by plain `from:` ranges.
-Pin them with `exact: "2.2.0-rc2"` (or a pre-release lower bound, `from: "2.2.0-rc2"`).
+The current release is `2.3.0`; pin it with `exact: "2.3.0"` (or `from: "2.3.0"`).
+Pre-release versions such as `2.2.0-rc2` are skipped by plain `from:` ranges; pin them with `exact:` (or a pre-release lower bound such as `from: "2.2.0-rc2"`).
 
 A Sauce-owned home for this package, **https://github.com/saucelabs/sauce-mobile-beta-ios**, is published with the same versions and manifest and becomes the canonical URL once it is public. Until then, use this repository.
 

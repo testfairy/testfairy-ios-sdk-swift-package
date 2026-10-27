@@ -18,7 +18,7 @@ import PackageDescription
 let package = Package(
     name: "SauceMobileBeta",
     platforms: [
-        .iOS(.v11)
+        .iOS(.v13)
     ],
     products: [
         .library(
@@ -29,8 +29,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "TestFairy",
-            url: "https://testfairy.s3.amazonaws.com/sdk/SauceMobileBeta-2.2.0-rc2.xcframework.zip",
-            checksum: "ec13df8d7bd18c773d8eac91ed179386106cfc97f7d2cbdbc251abfad88d3bfb"
+            url: "https://testfairy.s3.amazonaws.com/sdk/SauceMobileBeta-2.3.0.xcframework.zip",
+            checksum: "0968aff7d7dedc13df16961bef74b544275014ade68d6026d07efc06c9282fe2"
         ),
     ]
 )
